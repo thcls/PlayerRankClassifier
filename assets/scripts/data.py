@@ -38,8 +38,8 @@ def getJsonData(dataPath: str) -> list:
         dataList = load(file)
     return dataList
 
-def dataNumberToFloat() -> None:
-    dataList = getJsonData("assets/data/json/val_stats.json")
+def dataNumberToFloat(dataPath: str, dataList: list) -> None:
+    dataList = getJsonData(dataPath)
     for i in range(len(dataList)):
         for key in dataList[i].keys():
             try:
@@ -47,7 +47,8 @@ def dataNumberToFloat() -> None:
             except:
                 pass
                 
-    setJsonData("assets/data/json/val_stats.json", dataList)
+    setJsonData(dataPath, dataList)
     
 if __name__ == "__main__":
-    pass
+    dataList = getJsonData("assets/data/json/val_stats.json")
+    print(countData(dataList))
