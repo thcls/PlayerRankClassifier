@@ -1,3 +1,5 @@
 from assets.scripts.data import *
 
-print("oi")
+dataList = getJsonData("assets/data/json/val_stats.json")
+
+print(countData(dataList))
