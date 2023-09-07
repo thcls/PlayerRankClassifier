@@ -74,9 +74,11 @@ def normalize(dataList: dict) -> None:
             dataList[i][key] = x
             
 def prob(total: int, y: int) -> str:
-    return "{:.2f}%".format((100*y)/total)
+    result = str((100*y)/total)
+    result = result[:result.index(".")+3]
+    return f"{result}%"
 
-def test(testList: dict, testAnswers: dict) -> str:
+def accuracyTest(testList: dict, testAnswers: dict) -> str:
     total = len(testList)
     right = 0
     ranks = countData(testList)
@@ -121,6 +123,7 @@ def getTestList(dataList: dict) -> list:
     print(countData(dataList))
     print(len(testList))
     print(countData(testList))
+    
     return testList
 
 if __name__ == "__main__":
