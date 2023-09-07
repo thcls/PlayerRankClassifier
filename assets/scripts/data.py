@@ -1,5 +1,6 @@
 import csv
 from json import dump, load
+from random import randint
 
 def readData(path: str) -> dict:
     dataList = []
@@ -72,6 +73,56 @@ def normalize(dataList: dict) -> None:
             
             dataList[i][key] = x
             
+def prob(total: int, y: int) -> str:
+    return "{:.2f}%".format((100*y)/total)
+
+def test(testList: dict, testAnswers: dict) -> str:
+    total = len(testList)
+    right = 0
+    ranks = countData(testList)
+    rankProb = {'Radiant': 0,
+                'Immortal 3': 0, 
+                'Immortal 2': 0, 
+                'Immortal 1': 0}
+    
+    for i in range(total):
+        if testList[i]["rating"] == testAnswers[i]["rating"]:
+            right += 1
+            rankProb[testAnswers[i]["rating"]] += 1
+            print(f"Precisão de {prob(total, right)}")
+            
+    for key in rankProb.keys():
+        rankProb[key] = prob(ranks[key], rankProb[key])
+        
+    msg = f"{rankProb} = {prob(total, right)}"
+    
+    print(msg)
+    
+    return msg
+    
+def getTestList(dataList: dict) -> list:
+    testList = []
+    
+    ranks = {'Radiant': 529,
+            'Immortal 3': 2222, 
+            'Immortal 2': 4209, 
+            'Immortal 1': 10427}
+
+    while ranks['Radiant'] != 0 or ranks['Immortal 1'] != 0 or ranks['Immortal 2'] != 0 or ranks['Immortal 3'] != 0:
+        index = randint(0, len(dataList)-1)
+        rank = dataList[index]["rating"]
+        
+        if ranks.get(rank,-1) != -1 and ranks[rank] != 0:
+            print(f"{ranks} ____ {rank}")
+            player = dataList.pop(index)
+            ranks[rank] -= 1
+            testList.append(player)
+    
+    print(countData(dataList))
+    print(len(testList))
+    print(countData(testList))
+    return testList
+
 if __name__ == "__main__":
     dataList = getJsonData("assets/data/json/val_stats.json")
     
